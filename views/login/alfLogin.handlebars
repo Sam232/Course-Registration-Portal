@@ -1,0 +1,37 @@
+<div class="login-box">
+  <div class="login-logo">
+    <img class="img-size" src="/img/logo.png" alt="">
+    <a href="#">GTUC<b>COURSE</b>REG.</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+    {{#if error}}
+      <strong class="text-danger">{{error}}</strong>
+    {{/if}}
+    {{#if error_msg}}
+      <strong class="text-danger">{{error_msg}}</strong>
+    {{/if}}
+    {{#if success}}
+      <strong class="text-success">{{success}}</strong>
+    {{/if}}
+    {{#if success_msg}}
+      <strong class="text-success">{{success_msg}}</strong>
+    {{/if}}
+    <form action="/login/" method="post">
+      <div class="form-group has-feedback">
+        <input type="email" name="email" class="form-control" placeholder="Email">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <input type="hidden" name="password" value="{{linkId}}"/>
+      <div class="row">
+        <div class="col-md-8 col-xs-5">
+          <button type="submit" class="btn btn-primary btn-raised btn-block btn-flat">Send Me Login Link</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->

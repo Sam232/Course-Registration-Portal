@@ -1,0 +1,39 @@
+.img-size {
+  width: 70px;
+  height: 70px
+}
+
+.pushLogin{
+  margin-top: 70px;
+}
+
+.moveUp {
+  margin-top: -50px
+}
+
+.moveUp1 {
+  margin-top: -15px
+}
+
+.noStyle {
+  margin: 0px
+}
+
+.selectForm {
+  width: 100%;
+  height: 20px
+}
+
+.scroll {
+  overflow-y: scroll;
+  height: 332px;
+}
+
+.btnStyle {
+  border: 0; 
+  background-color: transparent;
+}
+
+.tableWidth {
+  overflow-x: scroll
+}
