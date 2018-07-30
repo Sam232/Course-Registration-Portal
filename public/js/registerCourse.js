@@ -41,7 +41,7 @@ $(document).ready(() => {
     }
     if(deleteCourse){
       //Delete A Student's RegisteredCourse
-      return axios.delete("http://localhost:3000/student/delete/course/"+deleteCourse, {
+      return axios.delete("https://gtuccr.herokuapp.com/student/delete/course/"+deleteCourse, {
         headers: {
           "Access-Control-Allow-Origin": "*"
         },
