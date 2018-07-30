@@ -17,7 +17,7 @@ $(document).ready(() => {
 
     if(registeredCourse){
       //Register A Student's Course
-      return axios.post("http://localhost:3000/student/add/course/", registeredCourse, {
+      return axios.post("https://gtuccr.herokuapp.com/student/add/course/", registeredCourse, {
         headers: {
           "Access-Control-Allow-Origin": "*"
         },
