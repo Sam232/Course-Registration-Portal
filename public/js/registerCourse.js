@@ -22,7 +22,7 @@ $(document).ready(() => {
           "Access-Control-Allow-Origin": "*"
         },
         proxy: {
-          host: "http://localhost:3000",
+          host: "https://gtuccr.herokuapp.com/",
           port: 3000
         }
       })
@@ -46,7 +46,7 @@ $(document).ready(() => {
           "Access-Control-Allow-Origin": "*"
         },
         proxy: {
-          host: "http://localhost:3000",
+          host: "https://gtuccr.herokuapp.com/",
           port: 3000
         }
       })
