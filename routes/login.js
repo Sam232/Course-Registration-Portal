@@ -157,8 +157,8 @@ routes.post("/update/password/:token", (req, res) => {
     .then((response) => {
       if(response){
         res.locals.pageTitle = "Login";
-        res.locals.success_ = response.data.msg;
-        return res.render("login/studentLogin");
+        req.flash("success_msg", response.data.msg);
+        return res.redirect("/login/");
       }
     })
     .catch((err) => {
