@@ -32,7 +32,55 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" class="moveUp1" action="/admin/add/student/{{user.token}}" method="post">
+            <div class="box-body scroll">
+              <form action="/admin/add/students/{{user.token}}" method="post">
+                <div class="form-group">
+                  <label for="uploadStudentsData">Upload Excel File Containing Students Personal Details</label>
+                  <input type="file" class="form-control" name="studentsFile" />
+                </div>
+                <input type="submit" value="Upload" class="btn btn-primary btn-raised">
+              </form>
+              <p class="text-left">Add Single From Below</p>
+              <form role="form" class="moveUp1" action="/admin/add/student/{{user.token}}" method="post">
+                <div class="form-group has-feedback">
+                  {{#if error_msg}}
+                    <p class="text-danger noMargin">{{error_msg}}</p>
+                  {{/if}}
+                  {{#if error_msg_}}
+                    <p class="text-danger noMargin">{{error_msg_}}</p>
+                  {{/if}}
+                  {{#if success_msg}}
+                    <p class="text-success noMargin">{{success_msg}}</p>
+                  {{/if}}
+                  <input type="text" class="form-control" name="firstName" placeholder="Enter First Name" value="{{firstName}}" required>
+                  <span class="fa fa-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="lastName" placeholder="Enter Last Name" value="{{lastName}}" required>
+                  <span class="fa fa-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="indexNumber" placeholder="Enter Index Number" value="{{indexNumber}}" required>
+                  <span class="fa fa-pencil form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="email" class="form-control" name="email" placeholder="Enter Email" value="{{email}}" required>
+                  <span class="fa fa-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="mobileNumber" placeholder="Enter Mobile Number" value="{{mobileNumber}}" required>
+                  <span class="fa fa-phone form-control-feedback"></span>
+                </div>
+              <!-- /.box-body -->
+              </form>
+            </div>
+            <div class="box-footer">
+              <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+            </div>
+            
+
+
+            {{!-- <form role="form" class="moveUp1" action="/admin/add/student/{{user.token}}" method="post">
               <div class="box-body scroll">
                 <div class="form-group has-feedback">
                   {{#if error_msg}}
@@ -68,14 +116,7 @@
               <div class="box-footer">
                 <button type="submit" class="btn btn-primary btn-raised">Submit</button>
               </div>
-            </form>
-            <form action="/admin/add/students/{{user.token}}" method="post">
-              <div class="form-group">
-                <label for="uploadStudentsData">Upload Excel File Containing Students Personal Details</label>
-                <input type="file" class="form-control" name="studentsFile" />
-              </div>
-              <input type="submit" value="" class="btn btn-primary btn-raised">
-            </form>
+            </form> --}} 
           </div>
           <!-- /.box -->
         </div>
