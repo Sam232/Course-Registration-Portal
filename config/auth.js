@@ -12,10 +12,17 @@ module.exports = {
           if(response.data.queryState == "successful"){
             return next();
           }
-          res.render("notFound");
         })
         .catch((err) => {
           if(err){
+            if(err.response.data.errorMsg){
+              if(err.response.data.errorMsg == "Login Session Expired, Login Again"){
+                return res.render("loginSessionExpired");
+              }
+              else{
+                return res.render("unAuthorized");
+              }              
+            }
             res.render("errorOccured");          
           }
         });
@@ -33,10 +40,17 @@ module.exports = {
           if(response.data.queryState == "successful"){
             return next();
           }
-          res.render("notFound");
         })
         .catch((err) => {
           if(err){
+            if(err.response.data.errorMsg){
+              if(err.response.data.errorMsg == "Login Session Expired, Login Again"){
+                return res.render("loginSessionExpired");
+              }
+              else{
+                return res.render("unAuthorized");
+              }              
+            }
             res.render("errorOccured");          
           }
         });
@@ -54,10 +68,17 @@ module.exports = {
           if(response.data.queryState == "successful"){
             return next();
           }
-          res.render("notFound");
         })
         .catch((err) => {
           if(err){
+            if(err.response.data.errorMsg){
+              if(err.response.data.errorMsg == "Login Session Expired, Login Again"){
+                return res.render("loginSessionExpired");
+              }
+              else{
+                return res.render("unAuthorized");
+              }              
+            }
             res.render("errorOccured");          
           }
         });
@@ -75,10 +96,17 @@ module.exports = {
           if(response.data.queryState == "successful"){
             return next();
           }
-          res.render("notFound");
         })
         .catch((err) => {
           if(err){
+            if(err.response.data.errorMsg){
+              if(err.response.data.errorMsg == "Login Session Expired, Login Again"){
+                return res.render("loginSessionExpired");
+              }
+              else{
+                return res.render("unAuthorized");
+              }              
+            }
             res.render("errorOccured");          
           }
         });
