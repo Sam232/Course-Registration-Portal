@@ -14,11 +14,11 @@ module.exports = {
           }
         })
         .catch((err) => {
-          if(err.response.data.authState == "unsuccessful" && err.response.data.errorMsg == "An Error Occured, Try Again"){
-            return done(null, false, {message: "An Error Occured, Try Again"});
-          }
-          if(err.response.data.authState == "unsuccessful" && err.response.data.errorMsg == "Incorrect Login Credentials Provided"){
+          if(err.response.data.authState == "unsuccessful"){
             return done(null, false, {message: "Incorrect Login Credentials Provided"});
+          }
+          if(err.response.data.errorMsg == "An Error Occured, Try Again"){
+            return done(null, false, {message: "An Error Occured, Try Again"});
           }
           done(null, false, {message: "An Error Occured, Try Again"});
         });
@@ -35,13 +35,13 @@ module.exports = {
           }
         })
         .catch((err) => {
-          if(err.response.data.authState == "unsuccessful"){
-            return done(null, false, {message: "Incorrect Login Credential Provided"});
-          }
-          if(err.response.data.errorMsg == "An Error Occured, Try Again"){
+          if(err.response.data.authState == "unsuccessful" && err.response.data.errorMsg == "An Error Occured, Try Again"){
             return done(null, false, {message: "An Error Occured, Try Again"});
           }
-          return done(null, false, {message: "An Error Occured, Try Again"});
+          if(err.response.data.authState == "unsuccessful" && err.response.data.errorMsg == "Incorrect Login Credentials Provided"){
+            return done(null, false, {message: "Incorrect Login Credentials Provided"});
+          }
+          done(null, false, {message: "An Error Occured, Try Again"});
         });
     }));
 
