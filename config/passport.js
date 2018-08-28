@@ -35,6 +35,7 @@ module.exports = {
           }
         })
         .catch((err) => {
+          console.log(err)
           if(err.response.data.authState == "unsuccessful" && err.response.data.errorMsg == "An Error Occured, Try Again"){
             return done(null, false, {message: "An Error Occured, Try Again"});
           }
