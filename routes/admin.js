@@ -343,7 +343,7 @@ routes.post("/add/student/:token", ensureAdminAuthentication, (req, res) => {
 });
 
 //Add Two Or More Students Personal Details Contained In An Excel File
-routes.post("/admin/add/students/:token", ensureAdminAuthentication, (req, res) => {
+routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
   var fileName;
 
   var upload = multer({
