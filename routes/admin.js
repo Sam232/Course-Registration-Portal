@@ -418,17 +418,15 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
  
       readExcelFile(`./public/${excelFile}`, spreadSheetSchema).then((rows, errors) => {
         if(rows.length > 0){
-          console.log(rows);
           return rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
               var studentDetails = {
                 firstName: personalDetails[0],
                 lastName: personalDetails[1],
-                indexNumber: personalDetails[2],
-                email: personalDetails[3],
-                mobileNumber: personalDetails[4]
+                indexNumber: personalDetails[4],
+                email: personalDetails[2],
+                mobileNumber: personalDetails[3]
               };
-              console.log(studentDetails)
               return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
                 firstName: studentDetails.firstName,
                 lastName: studentDetails.lastName,
@@ -442,6 +440,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data.emailSent){
+                    console.log(response.data)
                     index++;
                   }
                 })
