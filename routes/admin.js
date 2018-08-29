@@ -375,48 +375,8 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
         return res.redirect(`/admin/add/student/${token}`);
       }
-
-      const spreadSheetSchema = {
-        "FIRST NAME": {
-          prop: "firstName",
-          type: String,
-          required: true
-        },
-        "LAST NAME": {
-          prop: "lastName",
-          type: String,
-          required: true
-        },
-        "EMAIL ADDRESS": {
-          prop: "email",
-          type: String,
-          required: true,
-          parse(value){
-            if(validator.validate(value)){
-              return value;
-            }
-            throw new Error("Invalid Email Provided For One Of The Students In The Excel File")
-          }
-        },
-        "MOBILE NUMBER": {
-          prop: "mobileNumber",
-          type: String,
-          required: true,
-          parse(value){
-            if(value.length == 10 && value.substring(0, 1) == 0){
-              return value;
-            }
-            throw new Error("Invalid Mobile Number Provided For One Of The Students In The Excel File")
-          }
-        },
-        "INDEX NUMBER": {
-          prop: "indexNumber",
-          type: String,
-          required: true
-        }
-      };
  
-      readExcelFile(`./public/${excelFile}`, spreadSheetSchema).then((rows, errors) => {
+      readExcelFile(`./public/${excelFile}`).then((rows, errors) => {
         if(rows.length > 0){
           rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
