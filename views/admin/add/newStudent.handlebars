@@ -34,9 +34,9 @@
             <!-- form start -->
             <div class="box-body scroll">
               <form action="/admin/add/students/{{user.token}}" method="post">
-                <p class="text-left">Upload Excel File Containing Students Personal Details</p>
                 <div class="form-group">
-                  <input type="file" class="form-control" name="studentsFile" />
+                  <label for="uploadExcelFile">Upload Excel File Containing Students Personal Details</label>
+                  <input type="file" class="form-control-file" name="studentsFile" />
                 </div>
                 <input type="submit" value="Upload" class="btn btn-primary btn-raised">
               </form>
