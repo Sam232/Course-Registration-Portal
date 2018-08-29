@@ -369,7 +369,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       }
     }).single("studentsFile");
 
-    return upload((req, res, (err) => {
+    return upload(req, res, (err) => {
       if(err){
         res.locals.pageTitle = "Add Student";
         req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
@@ -473,7 +473,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           return res.redirect(`/admin/add/student/${token}`);
         }
       });
-    }));
+    });
   }
   res.render("unAuthorized");
 });
