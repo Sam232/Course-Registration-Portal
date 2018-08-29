@@ -416,9 +416,10 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         }
       };
  
-      readExcelFile(`./public/${excelFile}`, {spreadSheetSchema}).then(({row, errors}) => {
-        console.log(row)
-        if(row.length > 0){
+      readExcelFile(`./public/${excelFile}`, {spreadSheetSchema}).then(({rows, errors}) => {
+        console.log(rows)
+        console.log(errors)
+        if(rows.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
             if(personalDetails){
