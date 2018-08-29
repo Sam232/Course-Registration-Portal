@@ -376,7 +376,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         return res.redirect(`/admin/add/student/${token}`);
       }
  
-      readExcelFile(`./public/${excelFile}`).then((rows, errors) => {
+      readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length > 0){
           var errorMsg;
           rows.forEach((personalDetails, index) => {
