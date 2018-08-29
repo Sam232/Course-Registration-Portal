@@ -345,7 +345,7 @@ routes.post("/add/student/:token", ensureAdminAuthentication, (req, res) => {
 //Add Two Or More Students Personal Details Contained In An Excel File
 routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
   var token = req.params.token;
-
+  console.log(req.body.studentsFile)
   if(token === req.user.token){
     var fileName;
 
@@ -356,7 +356,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         },
         filename: (req, file, callback) => {
           fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-          console.log(fileName)
           callback(null, fileName);
         }
       }),
