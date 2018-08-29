@@ -317,7 +317,6 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
         if(rows.length > 0){
           return rows.forEach((gradeDetails, index) => {
             if(gradeDetails && index > 0){
-              console.log(gradeDetails)
               var studentGrade = {
                 code: gradeDetails[0],
                 name: gradeDetails[1],
@@ -371,6 +370,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       })
       .catch((err) => {
         if(err){
+          console.log(err)
           res.locals.pageTitle = "Add Grade";
           req.flash("error_msg", err);
           res.redirect(`/lecturer/add/student-grade/${token}`);
