@@ -409,6 +409,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                         else{
                           req.flash("success_msg", "New Students Details Added");
                           res.redirect(`/admin/add/student/${token}`);
+                          console.log("working")
                         }
                       });
                     }
@@ -417,7 +418,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 })
                 .catch((err) => {
                   if(err.response){
-                    console.log(err.response.data.errorMsg)
                     req.flash("error_msg", err.response.data.errorMsg);
                     res.redirect(`/admin/add/student/${token}`);
                   }
