@@ -440,15 +440,14 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data.emailSent){
-                    console.log(response.data)
                     index++;
                   }
                 })
                 .catch((err) => {
                   if(err.response){
-                    console.log(err.response.data)
                     if(err.response.data.errorMsg){
-                      index++; 
+                      req.flash("error_msg", err.response.data.errorMsg);
+                      res.redirect(`/admin/add/student/${token}`);
                     }
                   }
                 });   
