@@ -408,7 +408,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                     if(err.response.data.errorMsg){
                       console.log(err.response.data.errorMsg)
                       req.flash("error_msg", err.response.data.errorMsg);
-                      return res.redirect(`/admin/add/student/${token}`);
+                      res.redirect(`/admin/add/student/${token}`);
                     }
                   }
                 });   
