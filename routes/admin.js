@@ -449,11 +449,11 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                       fs.unlink(`./public/${excelFile}`, (err) => {
                         if(err){
                           req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-                          res.redirect(`/admin/add/student/${token}`);
+                          return res.redirect(`/admin/add/student/${token}`);
                         }
                         else{
                           req.flash("error_msg", err.response.data.errorMsg);
-                          res.redirect(`/admin/add/student/${token}`);
+                          return res.redirect(`/admin/add/student/${token}`);
                         }                        
                       });
                     }
