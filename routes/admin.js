@@ -378,6 +378,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
  
       readExcelFile(`./public/${excelFile}`).then((rows, errors) => {
         if(rows.length > 0){
+          var errorMsg;
           rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
               var studentDetails = {
@@ -404,16 +405,13 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   }
                 })
                 .catch((err) => {
-                  if(err.response){
-                    switch(err.response){
-                      case err.response.data.errorMsg :
-                        req.flash("error_msg", err.response.data.errorMsg);
-                        return res.redirect(`/admin/add/student/${token}`);
-                        break;
-                      default : 
-                        console.log(err.response.data.errorMsg);
-                        break;
-                    }
+                  switch(err.response){
+                    case err.response.data.errorMsg :
+                      errorMsg = err.response.data.errorMsg;
+                      break;
+                    default : 
+                      console.log(err.response.data.errorMsg);
+                      break;
                   }
                 });   
             }
@@ -421,6 +419,10 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           return fs.unlink(`./public/${excelFile}`, (err) => {
             if(err){
               req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+              return res.redirect(`/admin/add/student/${token}`);
+            }
+            if(errorMsg){
+              req.flash("error_msg", errorMsg);
               return res.redirect(`/admin/add/student/${token}`);
             }
             req.flash("success_msg", "New Students Details Added");
