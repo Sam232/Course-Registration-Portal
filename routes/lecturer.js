@@ -314,6 +314,8 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       }
  
       readExcelFile(`./public/${excelFile}`).then((rows) => {
+        var addResponse;
+        var errorMsg;
         if(rows.length > 0){
           return rows.forEach((gradeDetails, index) => {
             if(gradeDetails && index > 0){
@@ -341,29 +343,25 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
               })
                 .then((response) => {
                   if(response.data){
-                    if(!index){
-                      return fs.unlink(`./public/${excelFile}`, (err) => {
-                        if(err){
-                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-                          res.redirect(`/lecturer/add/student-grade/${token}`);
-                        }
-                        else{
-                          req.flash("success_msg", "New Students Grades Added");
-                          res.redirect(`/lecturer/add/student-grade/${token}`);
-                        }
-                      });
-                    }
+                    addResponse = response.data;
                     index++;
                   }
                 })
                 .catch((err) => {
                   if(err.response){
-                    req.flash("error_msg", err.response.data.errorMsg);
-                    res.redirect(`/lecturer/add/student-grade/${token}`);
+                    errorMsg = err.response.data.errorMsg;
                   }
                 });   
             }
           });
+          if(addResponse){
+            req.flash("success_msg", "New Students Grades Added");
+            return res.redirect(`/lecturer/add/student-grade/${token}`);
+          }
+          else if(errorMsg){
+            req.flash("error_msg", errorMsg);
+            return res.redirect(`/lecturer/add/student-grade/${token}`);
+          }
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
         res.redirect(`/lecturer/add/student-grade/${token}`);
@@ -372,7 +370,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
         if(err){
           console.log(err)
           res.locals.pageTitle = "Add Grade";
-          req.flash("error_msg", err);
+          req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
           res.redirect(`/lecturer/add/student-grade/${token}`);
         }
       });
