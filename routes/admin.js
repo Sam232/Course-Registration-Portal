@@ -421,7 +421,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           console.log(rows);
           return rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
-              console.log(personalDetails)
               var studentDetails = {
                 firstName: personalDetails[0],
                 lastName: personalDetails[1],
@@ -429,7 +428,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 email: personalDetails[3],
                 mobileNumber: personalDetails[4]
               };
-          
+              console.log(studentDetails)
               return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
                 firstName: studentDetails.firstName,
                 lastName: studentDetails.lastName,
@@ -449,7 +448,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 .catch((err) => {
                   if(err.response){
                     if(err.response.data.errorMsg){
-                      return null; 
+                      index++; 
                     }
                   }
                 });   
