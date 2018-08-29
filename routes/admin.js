@@ -361,7 +361,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       }),
       fileFilter: (req, file, callback) => {
         var extname = path.extname(file.originalname);
-
+        
         if(extname === ".xlsx"){
           return callback(null, true);
         }
@@ -370,13 +370,54 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
     }).single("studentsFile");
 
     return upload(req, res, (err) => {
+      console.log("file",fileName)
       if(err){
         res.locals.pageTitle = "Add Student";
         req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
         return res.redirect(`/admin/add/student/${token}`);
       }
 
-      readExcelFile(`./public/${fileName}`).then(({row, errors}) => {
+      const spreadSheetSchema = {
+        "FIRST NAME": {
+          prop: "firstName",
+          type: String,
+          required: true
+        },
+        "LAST NAME": {
+          prop: "lastName",
+          type: String,
+          required: true
+        },
+        "EMAIL ADDRESS": {
+          prop: "email",
+          type: String,
+          required: true,
+          parse(value){
+            if(validator.validate(value)){
+              return value;
+            }
+            throw new Error("Invalid Email Provided For One Of The Students In The Excel File")
+          }
+        },
+        "MOBILE NUMBER": {
+          prop: "mobileNumber",
+          type: Number,
+          required: true,
+          parse(value){
+            if(value.length !== 10 && value.substring(0, 1) !== 0){
+              return value;
+            }
+            throw new Error("Invalid Mobile Number Provided For One Of The Students In The Excel File")
+          }
+        },
+        "INDEX NUMBER": {
+          prop: "indexNumber",
+          type: String,
+          required: true
+        }
+      };
+ 
+      readExcelFile(`./public/${fileName}`, {spreadSheetSchema}).then(({row, errors}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
