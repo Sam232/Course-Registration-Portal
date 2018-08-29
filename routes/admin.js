@@ -349,7 +349,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
   var upload = multer({
     storage: multer.diskStorage({
       destination: (req, file, callback) => {
-        callback(null, "./public/excelFile");
+        callback(null, "./public/excelFile/");
       },
       filename: (req, file, callback) => {
         fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
@@ -444,11 +444,19 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               .catch((err) => {
                 if(err.response){
                   if(err.response.data.errorMsg){
-                    return err.response.data.errorMsg;
+                    return null; //err.response.data.errorMsg;
                   }
                 }
               });   
           }
+          fs.unlink(`./public/excelFile/${fileName}`, () => {
+            if(err){
+              req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+              return res.redirect(`/admin/add/student/${token}`);
+            }
+            req.flash("success_msg", "New Students Details Added");
+            res.redirect(`/admin/add/student/${token}`);
+          });
         });
       }
       req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
