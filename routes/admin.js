@@ -356,6 +356,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         },
         filename: (req, file, callback) => {
           fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          console.log(fileName)
           callback(null, fileName);
         }
       }),
@@ -415,7 +416,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           required: true
         }
       };
-      console.log(fileName)
+ 
       readExcelFile(`./public/${fileName}`, {spreadSheetSchema}).then(({row, errors}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
