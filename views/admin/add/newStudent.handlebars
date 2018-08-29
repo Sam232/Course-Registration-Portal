@@ -33,14 +33,14 @@
             <!-- /.box-header -->
             <!-- form start -->
             <div class="box-body scroll">
-              <form action="/admin/add/students/{{user.token}}" method="post">
+              <form role="form" action="/admin/add/students/{{user.token}}" method="post">
                 <div class="form-group">
                   <label for="uploadExcelFile">Upload Excel File Containing Students Personal Details</label>
-                  <input type="file" class="form-control-file" name="studentsFile" />
+                  <input type="file" class="form-control-file" name="studentsFile"/>
                 </div>
                 <input type="submit" value="Upload" class="btn btn-primary btn-raised">
               </form>
-              <p class="text-left">Add Single From Below</p>
+              <h4 class="text-left">Add Single Student From Below</h4>
               <form role="form" class="moveUp1" action="/admin/add/student/{{user.token}}" method="post">
                 <div class="form-group has-feedback">
                   {{#if error_msg}}

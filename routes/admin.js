@@ -344,136 +344,137 @@ routes.post("/add/student/:token", ensureAdminAuthentication, (req, res) => {
 
 //Add Two Or More Students Personal Details Contained In An Excel File
 routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
-  var fileName;
+  var token = req.params.token;
 
-  var upload = multer({
-    storage: multer.diskStorage({
-      destination: (req, file, callback) => {
-        callback(null, "./public/excelFile/");
-      },
-      filename: (req, file, callback) => {
-        fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-        callback(null, fileName);
-      }
-    }),
-    fileFilter: (req, file, callback) => {
-      var extname = path.extname(file.originalname);
+  if(token === req.user.token){
+    var fileName;
 
-      if(extname === ".xlsx"){
-        return callback(null, true);
-      }
-      callback(new Error("A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded"));
-    }
-  }).single("studentsFile");
-
-  upload((req, res, (err) => {
-    if(err){
-      res.locals.pageTitle = "Add Student";
-      req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
-      return res.redirect(`/admin/add/student/${token}`);
-    }
-
-    const spreadSheetSchema = {
-      "FIRST NAME": {
-        prop: "firstName",
-        type: String,
-        required: true
-      },
-      "LAST NAME": {
-        prop: "lastName",
-        type: String,
-        required: true
-      },
-      "EMAIL ADDRESS": {
-        prop: "email",
-        type: String,
-        required: true,
-        parse(value){
-          if(validator.validate(value)){
-            return value;
-          }
-          throw new Error("Invalid Email Provided For One Of The Students In The Excel File")
+    var upload = multer({
+      storage: multer.diskStorage({
+        destination: (req, file, callback) => {
+          callback(null, "./public/excelFile/");
+        },
+        filename: (req, file, callback) => {
+          fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          callback(null, fileName);
         }
-      },
-      "MOBILE NUMBER": {
-        prop: "mobileNumber",
-        type: Number,
-        required: true,
-        parse(value){
-          if(value.length !== 10 && value.substring(0, 1) !== 0){
-            return value;
-          }
-          throw new Error("Invalid Mobile Number Provided For One Of The Students In The Excel File")
+      }),
+      fileFilter: (req, file, callback) => {
+        var extname = path.extname(file.originalname);
+
+        if(extname === ".xlsx"){
+          return callback(null, true);
         }
-      },
-      "INDEX NUMBER": {
-        prop: "indexNumber",
-        type: String,
-        required: true
+        callback(new Error("A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded"));
       }
-    };
-    
-    readExcelFile(`./public/excelFile/${fileName}`).then(({row}) => {
-      if(row.length > 0){
-        return row.forEach((personalDetails, index) => {
-          if(personalDetails){
-            var studentDetails = {
-              firstName: personalDetails.firstName,
-              lastName: personalDetails.lastName,
-              indexNumber: personalDetails.indexNumber,
-              email: personalDetails.email,
-              mobileNumber: personalDetails.mobileNumber
-            };
-        
-            return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
-              firstName: studentDetails.firstName,
-              lastName: studentDetails.lastName,
-              indexNumber: studentDetails.indexNumber,
-              email: studentDetails.email,
-              mobileNumber: studentDetails.mobileNumber
-            }, {
-              headers: {
-                "Authorization": `bearer ${token}`
-              }
-            })
-              .then((response) => {
-                if(response.data.emailSent){
-                  return null;
-                }
-              })
-              .catch((err) => {
-                if(err.response){
-                  if(err.response.data.errorMsg){
-                    return null; //err.response.data.errorMsg;
-                  }
-                }
-              });   
-          }
-          fs.unlink(`./public/excelFile/${fileName}`, () => {
-            if(err){
-              req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-              return res.redirect(`/admin/add/student/${token}`);
-            }
-            req.flash("success_msg", "New Students Details Added");
-            res.redirect(`/admin/add/student/${token}`);
-          });
-        });
-      }
-      req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
-      res.redirect(`/admin/add/student/${token}`);
-    })
-    .catch((err) => {
+    }).single("studentsFile");
+
+    return upload((req, res, (err) => {
       if(err){
         res.locals.pageTitle = "Add Student";
-        req.flash("error_msg", err);
+        req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
         return res.redirect(`/admin/add/student/${token}`);
       }
-    });
 
-
-
-  }));
-
+      const spreadSheetSchema = {
+        "FIRST NAME": {
+          prop: "firstName",
+          type: String,
+          required: true
+        },
+        "LAST NAME": {
+          prop: "lastName",
+          type: String,
+          required: true
+        },
+        "EMAIL ADDRESS": {
+          prop: "email",
+          type: String,
+          required: true,
+          parse(value){
+            if(validator.validate(value)){
+              return value;
+            }
+            throw new Error("Invalid Email Provided For One Of The Students In The Excel File")
+          }
+        },
+        "MOBILE NUMBER": {
+          prop: "mobileNumber",
+          type: Number,
+          required: true,
+          parse(value){
+            if(value.length !== 10 && value.substring(0, 1) !== 0){
+              return value;
+            }
+            throw new Error("Invalid Mobile Number Provided For One Of The Students In The Excel File")
+          }
+        },
+        "INDEX NUMBER": {
+          prop: "indexNumber",
+          type: String,
+          required: true
+        }
+      };
+      
+      readExcelFile(`./public/excelFile/${fileName}`).then(({row}) => {
+        if(row.length > 0){
+          return row.forEach((personalDetails, index) => {
+            if(personalDetails){
+              var studentDetails = {
+                firstName: personalDetails.firstName,
+                lastName: personalDetails.lastName,
+                indexNumber: personalDetails.indexNumber,
+                email: personalDetails.email,
+                mobileNumber: personalDetails.mobileNumber
+              };
+          
+              return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
+                firstName: studentDetails.firstName,
+                lastName: studentDetails.lastName,
+                indexNumber: studentDetails.indexNumber,
+                email: studentDetails.email,
+                mobileNumber: studentDetails.mobileNumber
+              }, {
+                headers: {
+                  "Authorization": `bearer ${token}`
+                }
+              })
+                .then((response) => {
+                  if(response.data.emailSent){
+                    return null;
+                  }
+                })
+                .catch((err) => {
+                  if(err.response){
+                    if(err.response.data.errorMsg){
+                      return null; //err.response.data.errorMsg;
+                    }
+                  }
+                });   
+            }
+            fs.unlink(`./public/excelFile/${fileName}`, () => {
+              if(err){
+                req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+                return res.redirect(`/admin/add/student/${token}`);
+              }
+              req.flash("success_msg", "New Students Details Added");
+              res.redirect(`/admin/add/student/${token}`);
+            });
+          });
+        }
+        req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
+        res.redirect(`/admin/add/student/${token}`);
+      })
+      .catch((err) => {
+        if(err){
+          res.locals.pageTitle = "Add Student";
+          req.flash("error_msg", err);
+          return res.redirect(`/admin/add/student/${token}`);
+        }
+      });
+    }));
+  }
+  res.render("unAuthorized");
 });
 
 //Add New Registration Dates
