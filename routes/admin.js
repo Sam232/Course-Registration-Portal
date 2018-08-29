@@ -378,7 +378,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
  
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length > 0){
-          return rows.forEach((personalDetails, index) => {
+          rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
               var studentDetails = {
                 firstName: personalDetails[0],
@@ -400,19 +400,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data){
-                    if(!index){
-                      return fs.unlink(`./public/${excelFile}`, (err) => {
-                        if(err){
-                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-                          res.redirect(`/admin/add/student/${token}`);
-                        }
-                        else{
-                          req.flash("success_msg", "New Students Details Added");
-                          res.redirect(`/admin/add/student/${token}`);
-                          console.log("working")
-                        }
-                      });
-                    }
                     index++;
                   }
                 })
@@ -422,6 +409,17 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                     res.redirect(`/admin/add/student/${token}`);
                   }
                 });   
+            }
+          });
+          
+          return fs.unlink(`./public/${excelFile}`, (err) => {
+            if(err){
+              req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+              res.redirect(`/admin/add/student/${token}`);
+            }
+            else{
+              req.flash("success_msg", "New Students Details Added");
+              res.redirect(`/admin/add/student/${token}`);
             }
           });
         }
