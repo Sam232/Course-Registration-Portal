@@ -352,7 +352,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
     var upload = multer({
       storage: multer.diskStorage({
         destination: (req, file, callback) => {
-          callback(null, "./public/excelFile/");
+          callback(null, "../public/excelFile/");
         },
         filename: (req, file, callback) => {
           fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
@@ -416,7 +416,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         }
       };
       
-      readExcelFile(`./public/excelFile/${fileName}`, {spreadSheetSchema}).then(({row}) => {
+      readExcelFile(`../public/excelFile/${fileName}`, {spreadSheetSchema}).then(({row}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
@@ -448,7 +448,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 .catch((err) => {
                   if(err.response){
                     if(err.response.data.errorMsg){
-                      return null //err.response.data.errorMsg
+                      return null; //err.response.data.errorMsg
                     }
                   }
                 });   
