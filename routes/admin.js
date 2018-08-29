@@ -407,6 +407,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 .catch((err) => {
                   switch(err.response){
                     case err.response.data.errorMsg :
+                      console.log(err.response.data.errorMsg)
                       errorMsg = err.response.data.errorMsg;
                       break;
                     default : 
