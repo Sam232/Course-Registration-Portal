@@ -418,7 +418,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
  
       readExcelFile(`./public/${excelFile}`, spreadSheetSchema).then((rows, errors) => {
         if(rows.length > 0){
-          return rows.forEach((personalDetails, index) => {
+          rows.forEach((personalDetails, index) => {
             if(personalDetails && index > 0){
               var studentDetails = {
                 firstName: personalDetails[0],
@@ -427,7 +427,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 email: personalDetails[2],
                 mobileNumber: personalDetails[3].toString()
               };
-              return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
+              axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
                 firstName: studentDetails.firstName,
                 lastName: studentDetails.lastName,
                 indexNumber: studentDetails.indexNumber,
@@ -448,19 +448,19 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                     if(err.response.data.errorMsg){
                       console.log(err.response.data.errorMsg)
                       req.flash("error_msg", err.response.data.errorMsg);
-                      res.redirect(`/admin/add/student/${token}`);
+                      return res.redirect(`/admin/add/student/${token}`);
                     }
                   }
                 });   
             }
-            fs.unlink(`./public/${excelFile}`, (err) => {
-              if(err){
-                req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-                return res.redirect(`/admin/add/student/${token}`);
-              }
-              req.flash("success_msg", "New Students Details Added");
-              res.redirect(`/admin/add/student/${token}`);
-            });
+          });
+          return fs.unlink(`./public/${excelFile}`, (err) => {
+            if(err){
+              req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+              return res.redirect(`/admin/add/student/${token}`);
+            }
+            req.flash("success_msg", "New Students Details Added");
+            res.redirect(`/admin/add/student/${token}`);
           });
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
