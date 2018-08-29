@@ -32,16 +32,16 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            {{#if error_msg}}
-              <p class="text-danger noMargin">{{error_msg}}</p>
-            {{/if}}
-            {{#if error_msg_}}
-              <p class="text-danger noMargin">{{error_msg_}}</p>
-            {{/if}}
-            {{#if success_msg}}
-              <p class="text-success noMargin">{{success_msg}}</p>
-            {{/if}}
             <div class="box-body scroll">
+              {{#if error_msg}}
+                <p class="text-danger noMargin">{{error_msg}}</p>
+              {{/if}}
+              {{#if error_msg_}}
+                <p class="text-danger noMargin">{{error_msg_}}</p>
+              {{/if}}
+              {{#if success_msg}}
+                <p class="text-success noMargin">{{success_msg}}</p>
+              {{/if}}
               <form role="form" action="/admin/add/students/{{user.token}}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                   <label for="uploadExcelFile">Upload Excel File Containing Students Personal Details</label>
