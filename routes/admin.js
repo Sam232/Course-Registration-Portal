@@ -423,11 +423,11 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
             if(personalDetails && index > 0){
               console.log(personalDetails)
               var studentDetails = {
-                firstName: personalDetails.firstName,
-                lastName: personalDetails.lastName,
-                indexNumber: personalDetails.indexNumber,
-                email: personalDetails.email,
-                mobileNumber: personalDetails.mobileNumber
+                firstName: personalDetails[0],
+                lastName: personalDetails[1],
+                indexNumber: personalDetails[2],
+                email: personalDetails[3],
+                mobileNumber: personalDetails[4]
               };
           
               return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
@@ -443,13 +443,13 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data.emailSent){
-                    return null;
+                    index++;
                   }
                 })
                 .catch((err) => {
                   if(err.response){
                     if(err.response.data.errorMsg){
-                      return null; //err.response.data.errorMsg
+                      return null; 
                     }
                   }
                 });   
