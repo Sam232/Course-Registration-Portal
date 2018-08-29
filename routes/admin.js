@@ -401,6 +401,18 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data){
+                    if(rows.length == index+1){
+                      return fs.unlink(`./public/${excelFile}`, (err) => {
+                        if(err){
+                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+                          res.redirect(`/admin/add/student/${token}`);
+                        }
+                        else{
+                          req.flash("success_msg", "New Students Details Added");
+                          res.redirect(`/admin/add/student/${token}`);
+                        }
+                      });
+                    }
                     index++;
                   }
                 })
@@ -408,19 +420,9 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   if(err.response){
                     console.log(err.response.data.errorMsg)
                     req.flash("error_msg", err.response.data.errorMsg);
-                    return res.redirect(`/admin/add/student/${token}`);
+                    res.redirect(`/admin/add/student/${token}`);
                   }
                 });   
-            }
-          });
-          fs.unlink(`./public/${excelFile}`, (err) => {
-            if(err){
-              req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
-              res.redirect(`/admin/add/student/${token}`);
-            }
-            else{
-              req.flash("success_msg", "New Students Details Added");
-              res.redirect(`/admin/add/student/${token}`);
             }
           });
         }
