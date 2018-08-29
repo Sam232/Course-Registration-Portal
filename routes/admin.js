@@ -410,7 +410,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                       errorMsg = err.response.data.errorMsg;
                       break;
                     default : 
-                      console.log(err.response.data.errorMsg);
                       break;
                   }
                 });   
@@ -421,6 +420,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
               return res.redirect(`/admin/add/student/${token}`);
             }
+            console.log("error",errorMsg)
             if(errorMsg){
               req.flash("error_msg", errorMsg);
               return res.redirect(`/admin/add/student/${token}`);
