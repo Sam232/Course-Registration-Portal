@@ -378,7 +378,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
  
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length > 0){
-          console.log(rows);
           return rows.forEach((personalDetails, index) => {
             console.log(personalDetails)
             if(personalDetails){
