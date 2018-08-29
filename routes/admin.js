@@ -407,22 +407,21 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 .catch((err) => {
                   if(err.response){
                     console.log(err.response.data.errorMsg)
-                    errorMsg = err.response.data.errorMsg;
+                    req.flash("error_msg", err.response.data.errorMsg);
+                    return res.redirect(`/admin/add/student/${token}`);
                   }
                 });   
             }
           });
-          return fs.unlink(`./public/${excelFile}`, (err) => {
+          fs.unlink(`./public/${excelFile}`, (err) => {
             if(err){
               req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
               return res.redirect(`/admin/add/student/${token}`);
             }
-            if(errorMsg){
-              req.flash("error_msg", errorMsg);
+            else{
+              req.flash("success_msg", "New Students Details Added");
               return res.redirect(`/admin/add/student/${token}`);
             }
-            req.flash("success_msg", "New Students Details Added");
-            res.redirect(`/admin/add/student/${token}`);
           });
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
