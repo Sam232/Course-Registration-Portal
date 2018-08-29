@@ -448,7 +448,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 .catch((err) => {
                   if(err.response){
                     if(err.response.data.errorMsg){
-                      return null; //err.response.data.errorMsg;
+                      return null //err.response.data.errorMsg
                     }
                   }
                 });   
