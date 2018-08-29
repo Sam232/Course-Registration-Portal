@@ -275,6 +275,108 @@ routes.post("/add/student-grade/:token", ensureLecturerAuthentication, (req, res
   res.render("unAuthorized");
 });
 
+//Add Two Or More Students Grades Contained In An Excel File
+routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, res) => {
+  var token = req.params.token;
+  
+  if(token === req.user.token){
+    var excelFile;
+
+    var upload = multer({
+      storage: multer.diskStorage({
+        destination: (req, file, callback) => {
+          callback(null, "./public/");
+        },
+        filename: (req, file, callback) => {
+          excelFile = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          callback(null, excelFile);
+        }
+      }),
+      fileFilter: (req, file, callback) => {
+        var extname = path.extname(file.originalname);
+        
+        if(extname === ".xlsx"){
+          return callback(null, true);
+        }
+        callback(new Error("A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded"));
+      }
+    }).single("studentsGradeFile");
+
+    return upload(req, res, (err) => {
+      if(err){
+        res.locals.pageTitle = "Add Student Grades";
+        req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
+        return res.redirect(`/lecturer/add/student-grade/${token}`);
+      }
+ 
+      readExcelFile(`./public/${excelFile}`).then((rows) => {
+        if(rows.length > 0){
+          return rows.forEach((gradeDetails, index) => {
+            if(gradeDetails && index > 0){
+              var studentGrade = {
+                code: gradeDetails[0],
+                name: gradeDetails[1],
+                grade: gradeDetails[2],
+                marks: gradeDetails[3],
+                level: gradeDetails[4],
+                semester: gradeDetails[5],
+                indexNumber: gradeDetails[6]
+              };
+              axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
+                code: studentGrade.code,
+                name: studentGrade.name,
+                grade: studentGrade.grade,
+                marks: studentGrade.marks,
+                level: studentGrade.level,
+                semester: studentGrade.semester,
+                indexNumber: studentGrade.indexNumber
+              }, {
+                headers: {
+                  "Authorization": `bearer ${token}`
+                }
+              })
+                .then((response) => {
+                  if(response.data){
+                    if(!index){
+                      return fs.unlink(`./public/${excelFile}`, (err) => {
+                        if(err){
+                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+                          res.redirect(`/lecturer/add/student-grade/${token}`);
+                        }
+                        else{
+                          req.flash("success_msg", "New Students Grades Added");
+                          res.redirect(`/lecturer/add/student-grade/${token}`);
+                        }
+                      });
+                    }
+                    index++;
+                  }
+                })
+                .catch((err) => {
+                  if(err.response){
+                    req.flash("error_msg", err.response.data.errorMsg);
+                    res.redirect(`/lecturer/add/student-grade/${token}`);
+                  }
+                });   
+            }
+          });
+        }
+        req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
+        res.redirect(`/lecturer/add/student-grade/${token}`);
+      })
+      .catch((err) => {
+        if(err){
+          res.locals.pageTitle = "Add Student";
+          req.flash("error_msg", err);
+          res.redirect(`/lecturer/add/student-grade/${token}`);
+        }
+      });
+    });
+  }
+  res.render("unAuthorized");
+});
+
+
 //Renders Page For Updating Course
 routes.get("/update/courses/:token", ensureLecturerAuthentication, (req, res) => {
   var token = req.params.token;
