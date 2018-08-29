@@ -439,7 +439,8 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 }
               })
                 .then((response) => {
-                  if(response.data.emailSent){
+                  console.log(response.data)
+                  if(response.data){
                     index++;
                   }
                 })
