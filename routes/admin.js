@@ -400,7 +400,10 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
               })
                 .then((response) => {
                   if(response.data){
-                    if(rows.length == index+1){
+                    var sumIndex = [];
+                    sumIndex.push(index);
+
+                    if(rows.length - 1 == sumIndex){
                       return fs.unlink(`./public/${excelFile}`, (err) => {
                         if(err){
                           req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
