@@ -347,7 +347,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
   var token = req.params.token;
   
   if(token === req.user.token){
-    var fileName;
+    var excelFile;
 
     var upload = multer({
       storage: multer.diskStorage({
@@ -355,8 +355,8 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           callback(null, "./public/");
         },
         filename: (req, file, callback) => {
-          fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
-          callback(null, fileName);
+          excelFile = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          callback(null, excelFile);
         }
       }),
       fileFilter: (req, file, callback) => {
@@ -370,7 +370,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
     }).single("studentsFile");
 
     return upload(req, res, (err) => {
-      console.log("file",fileName)
       if(err){
         res.locals.pageTitle = "Add Student";
         req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
@@ -417,7 +416,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         }
       };
  
-      readExcelFile(`./public/${fileName}`, {spreadSheetSchema}).then(({row, errors}) => {
+      readExcelFile(`./public/${excelFile}`, {spreadSheetSchema}).then(({row, errors}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
@@ -454,7 +453,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   }
                 });   
             }
-            fs.unlink(`./public/${fileName}`, (err) => {
+            fs.unlink(`./public/${excelFile}`, (err) => {
               if(err){
                 req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
                 return res.redirect(`/admin/add/student/${token}`);
