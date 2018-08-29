@@ -372,7 +372,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       .catch((err) => {
         if(err){
           res.locals.pageTitle = "Add Grade";
-          req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
+          req.flash("error_msg", "No Grade Details Of Students Are Contained In The Excel File");
           res.redirect(`/lecturer/add/student-grade/${token}`);
         }
       });
