@@ -468,6 +468,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       })
       .catch((err) => {
         if(err){
+          console.log(err)
           res.locals.pageTitle = "Add Student";
           req.flash("error_msg", err);
           return res.redirect(`/admin/add/student/${token}`);
