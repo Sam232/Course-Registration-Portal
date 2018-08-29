@@ -425,7 +425,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                 lastName: personalDetails[1],
                 indexNumber: personalDetails[4],
                 email: personalDetails[2],
-                mobileNumber: personalDetails[3]
+                mobileNumber: personalDetails[3].toString()
               };
               return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
                 firstName: studentDetails.firstName,
