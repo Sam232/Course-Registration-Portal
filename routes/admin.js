@@ -352,7 +352,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
     var upload = multer({
       storage: multer.diskStorage({
         destination: (req, file, callback) => {
-          callback(null, "../public/excelFile/");
+          callback(null, "./public/");
         },
         filename: (req, file, callback) => {
           fileName = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
@@ -416,7 +416,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         }
       };
       
-      readExcelFile(`../public/excelFile/${fileName}`, {spreadSheetSchema}).then(({row}) => {
+      readExcelFile(`./public/${fileName}`, {spreadSheetSchema}).then(({row, errors}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
@@ -453,7 +453,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   }
                 });   
             }
-            fs.unlink(`./public/excelFile/${fileName}`, () => {
+            fs.unlink(`./public/${fileName}`, () => {
               if(err){
                 req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
                 return res.redirect(`/admin/add/student/${token}`);
