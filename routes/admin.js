@@ -403,7 +403,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
           type: Number,
           required: true,
           parse(value){
-            if(value.length !== 10 && value.substring(0, 1) !== 0){
+            if(value.length !== 10 && value.subString(0, 1) !== 0){
               return value;
             }
             throw new Error("Invalid Mobile Number Provided For One Of The Students In The Excel File")
