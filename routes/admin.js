@@ -416,7 +416,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
         }
       };
  
-      readExcelFile(`./public/${fileName}`, {spreadSheetSchema}).then(({row, errors}) => {
+      readExcelFile(`./public/book.xlsx`, {spreadSheetSchema}).then(({row, errors}) => {
         if(row.length > 0){
           return row.forEach((personalDetails, index) => {
             console.log(personalDetails)
@@ -453,7 +453,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   }
                 });   
             }
-            fs.unlink(`./public/${fileName}`, () => {
+            fs.unlink(`./public/${fileName}`, (err) => {
               if(err){
                 req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
                 return res.redirect(`/admin/add/student/${token}`);
@@ -468,7 +468,6 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       })
       .catch((err) => {
         if(err){
-          console.log(err.response.data)
           res.locals.pageTitle = "Add Student";
           req.flash("error_msg", err);
           return res.redirect(`/admin/add/student/${token}`);
