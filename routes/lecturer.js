@@ -317,6 +317,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length >= 2){
           return rows.forEach((gradeDetails, index) => {
+            console.log(gradeDetails)
             if(gradeDetails.length == 7 && index > 0){
               var studentGrade = {
                 code: gradeDetails[0],
