@@ -324,9 +324,9 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                 classMarks: gradeDetails[2],
                 examMarks: gradeDetails[3],
                 totalMarks: gradeDetails[2] + gradeDetails[3],
-                level: gradeDetails[5],
-                semester: gradeDetails[6],
-                indexNumber: gradeDetails[7]
+                level: gradeDetails[4],
+                semester: gradeDetails[5],
+                indexNumber: gradeDetails[6]
               };
               return axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
                 courseCode: studentGrade.code,
