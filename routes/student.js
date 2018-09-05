@@ -284,7 +284,7 @@ routes.get("/update/profile", ensureStudentAuthentication, (req, res) => {
       lastName: personalDetails.lastName,
       indexNumber: personalDetails.indexNumber,
       email: personalDetails.email,
-      mobileNumber: "0"+personalDetails.mobileNumber
+      mobileNumber: personalDetails.mobileNumber
     });
   }
   res.render("unAuthorized");
