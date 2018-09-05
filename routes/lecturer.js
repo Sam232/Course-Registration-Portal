@@ -317,7 +317,6 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length >= 2){
           return rows.forEach((gradeDetails, index) => {
-            console.log(gradeDetails)
             if(gradeDetails.length == 7 && index > 0){
               var studentGrade = {
                 code: gradeDetails[0],
@@ -356,7 +355,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                         else{
                           req.flash("success_msg", "New Students Grades Added");
                           res.redirect(`/lecturer/add/student-grade/${token}`);
-                        }
+                        }     
                       });
                     }
                     index++;
@@ -364,6 +363,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                 })
                 .catch((err) => {
                   if(err.response){
+                    break;
                     req.flash("error_msg", err.response.data.errorMsg);
                     res.redirect(`/lecturer/add/student-grade/${token}`);
                   }
