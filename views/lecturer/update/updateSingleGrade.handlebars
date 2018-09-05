@@ -55,16 +55,15 @@
                   <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                  <label>Choose Grade</label>
-                  <select name="grade" class="form-control" required>
-                    {{#each grade as |gradeValue gradeKey|}}
-                      <option value="{{gradeValue}}">{{gradeValue}}</option>
-                    {{/each}}
-                  </select>
-                  <span class="fa fa-graduation-cap form-control-feedback"></span>
+                  <input type="text" class="form-control" name="classMarks" placeholder="Enter Class Marks" value="{{classMarks}}" required>
+                  <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                  <input type="text" class="form-control" name="marks" placeholder="Enter Exam Marks" value="{{marks}}" required>
+                  <input type="text" class="form-control" name="examMarks" placeholder="Enter Exam Marks" value="{{examMarks}}" required>
+                  <span class="fa fa-pencil form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="totalMarks" placeholder="Enter Total Marks" value="{{totalMarks}}" required>
                   <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">

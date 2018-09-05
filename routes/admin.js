@@ -311,14 +311,11 @@ routes.post("/add/student/:token", ensureAdminAuthentication, (req, res) => {
       }
     })
       .then((response) => {
-        if(response.data.emailSent){
+        if(response.data.studentAdded){
           res.locals.pageTitle = "Add Student";
           req.flash("success_msg", "New Student Added");
           return res.redirect(`/admin/add/student/${token}`);
         }
-        res.locals.pageTitle = "Add Student";
-        req.flash("success_msg", "New Student Added But Email Wasn\'t Sent To The User.");
-        res.redirect(`/admin/add/student/${token}`);
       })
       .catch((err) => {
         if(err.response){
@@ -403,8 +400,9 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                     var newRowLength = rows.length - 1;
                     if(index == newRowLength){
                       return fs.unlink(`./public/${excelFile}`, (err) => {
-                        if(err){
-                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+                        if(err){                          
+                          console.log("Unable To Delete Excel File After Submitting The Rows Of The Spreadsheet To The Database");
+                          req.flash("success_msg", "New Students Details Added");
                           res.redirect(`/admin/add/student/${token}`);
                         }
                         else{

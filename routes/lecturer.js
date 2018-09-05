@@ -232,8 +232,9 @@ routes.post("/add/student-grade/:token", ensureLecturerAuthentication, (req, res
     var newGrade = {
       courseCode: req.body.code,
       courseName: req.body.name,
-      grade: req.body.grade,
-      marks: req.body.marks,
+      classMarks: req.body.classMarks,
+      examMarks: req.body.examMarks,
+      totalMarks: req.body.totalMarks,
       level: req.body.level,
       semester: req.body.semester,
       indexNumber: req.body.indexNumber
@@ -264,8 +265,9 @@ routes.post("/add/student-grade/:token", ensureLecturerAuthentication, (req, res
           return res.render("lecturer/add/newGrade", {
             code: newGrade.courseCode,
             name: newGrade.courseName,
-            grade: newGrade.grade,
-            marks: newGrade.marks,
+            classMarks: newGrade.classMarks,
+            examMarks: newGrade.examMarks,
+            totalMarks: newGrade.totalMarks,
             level: newGrade.level,
             semester: newGrade.semester,
             indexNumber: newGrade.indexNumber
@@ -316,21 +318,23 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length > 0){
           return rows.forEach((gradeDetails, index) => {
-            if(gradeDetails && index > 0){
+            if(gradeDetails.length == 8 && index > 0){
               var studentGrade = {
                 code: gradeDetails[0],
                 name: gradeDetails[1],
-                grade: gradeDetails[2],
-                marks: gradeDetails[3],
-                level: gradeDetails[4],
-                semester: gradeDetails[5],
-                indexNumber: gradeDetails[6]
+                classMarks: gradeDetails[2],
+                examMarks: gradeDetails[3],
+                totalMarks: gradeDetails[4],
+                level: gradeDetails[5],
+                semester: gradeDetails[6],
+                indexNumber: gradeDetails[7]
               };
-              axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
+              return axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
                 courseCode: studentGrade.code,
                 courseName: studentGrade.name,
-                grade: studentGrade.grade,
-                marks: studentGrade.marks,
+                classMarks: studentGrade.classMarks,
+                examMarks: studentGrade.examMarks,
+                totalMarks: studentGrade.totalMarks,
                 level: studentGrade.level,
                 semester: studentGrade.semester,
                 indexNumber: studentGrade.indexNumber
@@ -345,7 +349,8 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                     if(index == newRowLength){
                       return fs.unlink(`./public/${excelFile}`, (err) => {
                         if(err){
-                          req.flash("error_msg", "An Error Occured While Adding The Students Details Contained In The Excel File, Try Again");
+                          console.log("Unable To Delete The Excel File Containing The Students Grade Details");
+                          req.flash("success_msg", "New Students Grades Added");
                           res.redirect(`/lecturer/add/student-grade/${token}`);
                         }
                         else{
@@ -364,6 +369,8 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                   }
                 });   
             }
+            req.flash("error_msg", "The Columns In The Excel File Should Be Up To Eight(8)");
+            res.redirect(`/lecturer/add/student-grade/${token}`);
           });
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
@@ -523,10 +530,6 @@ routes.get("/update/selected-grade/:id/:token", ensureLecturerAuthentication, (r
         if(response.data.queryState == "successful"){
           var result = response.data.gradeDetails;
 
-          var grades = ["A", "B", "C", "D", "E", "F"];
-          var selectedGrade = grades.filter(grade => grade !== result.grade);
-          selectedGrade.unshift(result.grade);
-
           var levels = [100, 200, 300, 400];
           var selectedLevel = levels.filter(level => level !== result.level);
           selectedLevel.unshift(result.level);
@@ -540,8 +543,10 @@ routes.get("/update/selected-grade/:id/:token", ensureLecturerAuthentication, (r
             _id: result._id,
             code: result.courseCode,
             name: result.courseName,
-            grade: selectedGrade,
-            marks: result.marks,
+            classMarks: result.classMarks,
+            examMarks: result.examMarks,
+            totalMarks: result.totalMarks,
+            grade: result.grade,
             level: selectedLevel,
             semester: selectedSemester,
             indexNumber: result.indexNumber

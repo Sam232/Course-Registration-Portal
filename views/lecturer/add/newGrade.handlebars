@@ -52,6 +52,7 @@
                 </div>
                 <input type="submit" value="Upload" class="btn btn-primary btn-raised">
               </form>
+              <h4 class="text-left">Add A Single Student's Grade From Below</h4>
               <form role="form" class="moveUp1" action="/lecturer/add/student-grade/{{user.token}}" method="post">
                 <div class="form-group has-feedback">
                   <input type="text" class="form-control" name="code" placeholder="Enter Course Code" value="{{code}}" required>
@@ -62,22 +63,15 @@
                   <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                  <label>Choose Grade</label>
-                  <select name="grade" class="form-control" required>
-                    {{#if grade}}
-                      <option value="{{grade}}" selected>{{grade}}</option>
-                    {{/if}}                    
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                  </select>
-                  <span class="fa fa-graduation-cap form-control-feedback"></span>
+                  <input type="text" class="form-control" name="classMarks" placeholder="Enter Class Marks" value="{{classMarks}}" required>
+                  <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                  <input type="text" class="form-control" name="marks" placeholder="Enter Exam Marks" value="{{marks}}" required>
+                  <input type="text" class="form-control" name="examMarks" placeholder="Enter Exam Marks" value="{{examMarks}}" required>
+                  <span class="fa fa-pencil form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" name="totalMarks" placeholder="Enter Total Marks" value="{{totalMarks}}" required>
                   <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
