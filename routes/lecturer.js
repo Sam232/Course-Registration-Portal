@@ -362,11 +362,11 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                   }
                 })
                 .catch((err) => {
-                  if(err.response){
-                    break;
+                  if(err.response){                    
                     req.flash("error_msg", err.response.data.errorMsg);
                     res.redirect(`/lecturer/add/student-grade/${token}`);
                   }
+                  break;
                 });   
             }
           });
