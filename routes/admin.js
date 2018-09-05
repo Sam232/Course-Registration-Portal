@@ -376,20 +376,16 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length > 0){
           return rows.forEach((personalDetails, index) => {
-            if(personalDetails && index > 0){
+            if(personalDetails.length == 3 && index > 0){
               var studentDetails = {
                 firstName: personalDetails[0],
                 lastName: personalDetails[1],
-                indexNumber: personalDetails[4],
-                email: personalDetails[2],
-                mobileNumber: personalDetails[3].toString()
+                indexNumber: personalDetails[2]
               };
-              axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
+              return axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/student", {
                 firstName: studentDetails.firstName,
                 lastName: studentDetails.lastName,
-                indexNumber: studentDetails.indexNumber,
-                email: studentDetails.email,
-                mobileNumber: studentDetails.mobileNumber
+                indexNumber: studentDetails.indexNumber
               }, {
                 headers: {
                   "Authorization": `bearer ${token}`
@@ -421,6 +417,8 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
                   }
                 });   
             }
+            req.flash("error_msg", "The Columns Contained In The Excel File Should Be Three(3)");
+            res.redirect(`/admin/add/student/${token}`);
           });
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
