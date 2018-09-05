@@ -328,7 +328,7 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                 semester: gradeDetails[5],
                 indexNumber: gradeDetails[6]
               };
-              return axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
+              axios.post(`https://gtuccrrestapi.herokuapp.com/lecturer/add/grade/${req.user.details._id}`, {
                 courseCode: studentGrade.code,
                 courseName: studentGrade.name,
                 classMarks: studentGrade.classMarks,
@@ -363,7 +363,6 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                 })
                 .catch((err) => {
                   if(err.response){
-                    console.log(err.response.data.err);
                     req.flash("error_msg", err.response.data.errorMsg);
                     res.redirect(`/lecturer/add/student-grade/${token}`);
                   }
