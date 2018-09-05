@@ -234,7 +234,7 @@ routes.post("/add/student-grade/:token", ensureLecturerAuthentication, (req, res
       courseName: req.body.name,
       classMarks: req.body.classMarks,
       examMarks: req.body.examMarks,
-      totalMarks: req.body.totalMarks,
+      totalMarks: req.body.classMarks + req.body.examMarks,
       level: req.body.level,
       semester: req.body.semester,
       indexNumber: req.body.indexNumber
@@ -267,7 +267,6 @@ routes.post("/add/student-grade/:token", ensureLecturerAuthentication, (req, res
             name: newGrade.courseName,
             classMarks: newGrade.classMarks,
             examMarks: newGrade.examMarks,
-            totalMarks: newGrade.totalMarks,
             level: newGrade.level,
             semester: newGrade.semester,
             indexNumber: newGrade.indexNumber
@@ -316,15 +315,15 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
       }
  
       readExcelFile(`./public/${excelFile}`).then((rows) => {
-        if(rows.length > 0){
+        if(rows.length >= 2){
           return rows.forEach((gradeDetails, index) => {
-            if(gradeDetails.length == 8 && index > 0){
+            if(gradeDetails.length == 7 && index > 0){
               var studentGrade = {
                 code: gradeDetails[0],
                 name: gradeDetails[1],
                 classMarks: gradeDetails[2],
                 examMarks: gradeDetails[3],
-                totalMarks: gradeDetails[4],
+                totalMarks: gradeDetails[2] + gradeDetails[3],
                 level: gradeDetails[5],
                 semester: gradeDetails[6],
                 indexNumber: gradeDetails[7]
@@ -543,8 +542,6 @@ routes.get("/update/selected-grade/:id/:token", ensureLecturerAuthentication, (r
             name: result.courseName,
             classMarks: result.classMarks,
             examMarks: result.examMarks,
-            totalMarks: result.totalMarks,
-            grade: result.grade,
             level: selectedLevel,
             semester: selectedSemester,
             indexNumber: result.indexNumber
@@ -660,8 +657,9 @@ routes.put("/update/selected-student-grade/:id/:token", ensureLecturerAuthentica
     var gradeDetails = {
       courseCode: req.body.code,
       courseName: req.body.name,
-      grade: req.body.grade,
-      marks: req.body.marks,
+      classMarks: req.body.classMarks,
+      examMarks: req.body.examMarks,
+      totalMarks: req.body.classMarks + req.body.examMarks,
       level: req.body.level,
       semester: req.body.semester,
       indexNumber: req.body.indexNumber
@@ -675,10 +673,6 @@ routes.put("/update/selected-student-grade/:id/:token", ensureLecturerAuthentica
       .then((response) => {
         if(response.data.updateState == "successful"){
           var result = response.data.updatedGrade;
-
-          var grades = ["A", "B", "C", "D", "E", "F"];
-          var selectedGrade = grades.filter(grade => grade !== result.grade);
-          selectedGrade.unshift(result.grade);
 
           var levels = [100, 200, 300, 400];
           var selectedLevel = levels.filter(level => level !== result.level);
@@ -694,8 +688,8 @@ routes.put("/update/selected-student-grade/:id/:token", ensureLecturerAuthentica
             _id: result._id,
             code: result.courseCode,
             name: result.courseName,
-            grade: selectedGrade,
-            marks: result.marks,
+            classMarks: result.classMarks,
+            examMarks: result.examMarks,
             level: selectedLevel,
             semester: selectedSemester,
             indexNumber: result.indexNumber
@@ -709,10 +703,6 @@ routes.put("/update/selected-student-grade/:id/:token", ensureLecturerAuthentica
             res.locals.pageTitle = "Update Grade";
             res.locals.error_msg_ = result.data.errorMsg;
 
-            var grades = ["A", "B", "C", "D", "E", "F"];
-            var selectedGrade = grades.filter(grade => grade !== gradeDetails.grade);
-            selectedGrade.unshift(gradeDetails.grade);
-
             var levels = [100, 200, 300, 400];
             var selectedLevel = levels.filter(level => level !== gradeDetails.level);
             selectedLevel.unshift(gradeDetails.level);
@@ -725,8 +715,8 @@ routes.put("/update/selected-student-grade/:id/:token", ensureLecturerAuthentica
               _id: gradeId,
               code: gradeDetails.courseCode,
               name: gradeDetails.courseName,
-              grade: selectedGrade,
-              marks: gradeDetails.marks,
+              classMarks: gradeDetails.classMarks,
+              examMarks: gradeDetails.examMarks,
               level: selectedLevel,
               semester: selectedSemester,
               indexNumber: gradeDetails.indexNumber
