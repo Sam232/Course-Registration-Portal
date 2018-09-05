@@ -369,8 +369,6 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                   }
                 });   
             }
-            req.flash("error_msg", "The Columns In The Excel File Should Be Up To Eight(8)");
-            res.redirect(`/lecturer/add/student-grade/${token}`);
           });
         }
         req.flash("error_msg", "No Personal Details Of Students Are Contained In The Excel File");
