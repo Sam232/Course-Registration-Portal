@@ -365,9 +365,10 @@ routes.post("/add/students-grades/:token", ensureLecturerAuthentication, (req, r
                   if(err.response){                    
                     break;  
                   }
-                  req.flash("error_msg", err.response.data.errorMsg);
-                  res.redirect(`/lecturer/add/student-grade/${token}`);
+                  // req.flash("error_msg", err.response.data.errorMsg);
+                  // res.redirect(`/lecturer/add/student-grade/${token}`);
                 });   
+                console.log("working")
             }
           });
         }
