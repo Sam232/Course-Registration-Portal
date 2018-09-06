@@ -28,25 +28,25 @@
       </ul>
     </li>
     <li class="treeview">
-      <a href="#"><i class="fa fa-edit disabled" aria-disabled="true"></i> <span>Update</span>
+      <a href="#"><i class="fa fa-edit"></i> <span>Update</span>
         <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
       </a>
       <ul class="treeview-menu">
         <li><a href="/lecturer/update/courses/{{user.token}}"><i class="fa fa-pencil"></i> <span>Course</span></a></li>
-        <li><a href="/lecturer/update/student/grades/{{user.token}}"><i class="fa fa-graduation-cap"></i> <span>Student Grade</span></a></li>
+        <li><a href="/lecturer/update/student/grades/{{user.token}}" class="disabled" aria-disabled="true"><i class="fa fa-graduation-cap"></i> <span>Student Grade</span></a></li>
       </ul>
     </li>
     <li class="treeview">
-      <a href="#"><i class="fa fa-trash disabled" aria-disabled="true"></i> <span>Delete</span>
+      <a href="#"><i class="fa fa-trash"></i> <span>Delete</span>
         <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
           </span>
       </a>
       <ul class="treeview-menu">
         <li><a href="/lecturer/delete/courses/{{user.token}}"><i class="fa fa-pencil"></i> <span>Course</span></a></li>
-        <li><a href="/lecturer/delete/student/grades/{{user.token}}"><i class="fa fa-graduation-cap"></i> <span>Student Grade</span></a></li>
+        <li><a href="/lecturer/delete/student/grades/{{user.token}}" class="disabled" aria-disabled="true"><i class="fa fa-graduation-cap"></i> <span>Student Grade</span></a></li>
       </ul>
     </li>
     <li><a href="/lecturer/view/saved/courses/{{user.token}}"><i class="fa fa-database"></i> <span>Saved Courses</span></a></li>
