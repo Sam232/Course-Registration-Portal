@@ -243,7 +243,7 @@ routes.post("/add/students-payments/:token", ensureFinanceAuthentication, (req, 
                 level: paymentDetails[1],
                 semester: paymentDetails[2]
               };
-              axios.post(`https://gtuccrrestapi.herokuapp.com/finance/add/payment/${financeId}.`, {
+              axios.post(`https://gtuccrrestapi.herokuapp.com/finance/add/payment/${financeId}`, {
                 indexNumber: studentPaymentDetails.indexNumber,
                 level: studentPaymentDetails.level,
                 semester: studentPaymentDetails.semester
