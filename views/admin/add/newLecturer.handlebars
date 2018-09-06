@@ -31,19 +31,26 @@
               <h3 class="box-title"><i class="fa fa-user"></i> New Lecturer</h3>
             </div>
             <!-- /.box-header -->
-            <!-- form start -->
-            <form role="form" class="moveUp1" action="/admin/add/lecturer/{{user.token}}" method="post">
-              <div class="box-body scroll">
-                <div class="form-group has-feedback">
-                  {{#if error_msg}}
-                    <p class="text-danger noMargin">{{error_msg}}</p>
-                  {{/if}}
-                  {{#if error_msg_}}
-                    <p class="text-danger noMargin">{{error_msg_}}</p>
-                  {{/if}}
-                  {{#if success_msg}}
-                    <p class="text-success noMargin">{{success_msg}}</p>
-                  {{/if}}
+            <div class="box-body scroll">
+              {{#if error_msg}}
+                <p class="text-danger noMargin">{{error_msg}}</p>
+              {{/if}}
+              {{#if error_msg_}}
+                <p class="text-danger noMargin">{{error_msg_}}</p>
+              {{/if}}
+              {{#if success_msg}}
+                <p class="text-success noMargin">{{success_msg}}</p>
+              {{/if}}
+              <form role="form" action="/admin/add/lecturers/{{user.token}}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="uploadExcelFile">Upload Excel File Containing Lecturers Personal Details</label>
+                  <input type="file" name="lecturersFile" required/>
+                </div>
+                <input type="submit" value="Upload" class="btn btn-primary btn-raised">
+              </form>
+              <!-- form start -->
+              <form role="form" class="moveUp1" action="/admin/add/lecturer/{{user.token}}" method="post">            
+                <div class="form-group has-feedback">                  
                   <input type="text" class="form-control" name="firstName" placeholder="Enter First Name" value="{{firstName}}" required>
                   <span class="fa fa-user form-control-feedback"></span>
                 </div>
@@ -59,12 +66,12 @@
                   <input type="text" class="form-control" name="mobileNumber" placeholder="Enter Mobile Number" value="{{mobileNumber}}" required>
                   <span class="fa fa-phone form-control-feedback"></span>
                 </div>
-              </div>
-              <!-- /.box-body -->
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
-              </div>
-            </form>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                  <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+                </div>              
+              </div>    
+            </form>        
           </div>
           <!-- /.box -->
         </div>
