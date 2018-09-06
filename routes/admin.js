@@ -286,7 +286,7 @@ routes.post("/add/lecturer/:token", ensureAdminAuthentication, (req, res) => {
   res.render("unAuthorized");
 });
 
-//Add Two Or More Students Personal Details Contained In An Excel File
+//Add Two Or More Lecturers Personal Details Contained In An Excel File
 routes.post("/add/lecturers/:token", ensureAdminAuthentication, (req, res) => {
   var token = req.params.token;
   
