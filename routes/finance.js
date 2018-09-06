@@ -202,6 +202,7 @@ routes.post("/add/student-payment/:token", ensureFinanceAuthentication, (req, re
 //Add Two Or More Students Payments Details Contained In An Excel File
 routes.post("/add/students-payments/:token", ensureFinanceAuthentication, (req, res) => {
   var token = req.params.token;
+  var financeId = req.user.details._id;
   
   if(token === req.user.token){
     var excelFile;
@@ -242,7 +243,7 @@ routes.post("/add/students-payments/:token", ensureFinanceAuthentication, (req, 
                 level: paymentDetails[1],
                 semester: paymentDetails[2]
               };
-              axios.post(`https://gtuccrrestapi.herokuapp.com/finance/add/payment/${req.user.details._id}.`, {
+              axios.post(`https://gtuccrrestapi.herokuapp.com/finance/add/payment/${financeId}.`, {
                 indexNumber: studentPaymentDetails.indexNumber,
                 level: studentPaymentDetails.level,
                 semester: studentPaymentDetails.semester
