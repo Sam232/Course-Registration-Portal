@@ -286,6 +286,103 @@ routes.post("/add/lecturer/:token", ensureAdminAuthentication, (req, res) => {
   res.render("unAuthorized");
 });
 
+//Add Two Or More Students Personal Details Contained In An Excel File
+routes.post("/add/lecturers/:token", ensureAdminAuthentication, (req, res) => {
+  var token = req.params.token;
+  
+  if(token === req.user.token){
+    var excelFile;
+
+    var upload = multer({
+      storage: multer.diskStorage({
+        destination: (req, file, callback) => {
+          callback(null, "./public/");
+        },
+        filename: (req, file, callback) => {
+          excelFile = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          callback(null, excelFile);
+        }
+      }),
+      fileFilter: (req, file, callback) => {
+        var extname = path.extname(file.originalname);
+        
+        if(extname === ".xlsx"){
+          return callback(null, true);
+        }
+        callback(new Error("A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded"));
+      }
+    }).single("lecturersFile");
+
+    return upload(req, res, (err) => {
+      if(err){
+        res.locals.pageTitle = "Add Student";
+        req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
+        return res.redirect(`/admin/add/student/${token}`);
+      }
+ 
+      readExcelFile(`./public/${excelFile}`).then((rows) => {
+        if(rows.length >= 2){
+          return rows.forEach((personalDetails, index) => {
+            if(personalDetails.length == 4 && index > 0){
+              var lecturerDetails = {
+                firstName: personalDetails[0],
+                lastName: personalDetails[1],
+                email: personalDetails[2],
+                mobileNumber: personalDetails[3]
+              };
+              axios.post("https://gtuccrrestapi.herokuapp.com/admin/add/lecturer", {
+                firstName: lecturerDetails.firstName,
+                lastName: lecturerDetails.lastName,
+                email: lecturerDetails.email,
+                mobileNumber: lecturerDetails.mobileNumber
+              }, {
+                headers: {
+                  "Authorization": `bearer ${token}`
+                }
+              })
+                .then((response) => {
+                  if(response.data){
+                    var newRowLength = rows.length - 1;
+                    if(index == newRowLength){
+                      return fs.unlink(`./public/${excelFile}`, (err) => {
+                        if(err){                          
+                          console.log("Unable To Delete Excel File After Submitting The Rows Of The Spreadsheet To The Database");
+                          req.flash("success_msg", "New Lecturers Details Added");
+                          res.redirect(`/admin/add/lecturer/${token}`);
+                        }
+                        else{
+                          req.flash("success_msg", "New Lecturers Details Added");
+                          res.redirect(`/admin/add/lecturer/${token}`);
+                        }
+                      });
+                    }
+                    index++;
+                  }
+                })
+                .catch((err) => {
+                  if(err.response){
+                    req.flash("error_msg", err.response.data.errorMsg);
+                    res.redirect(`/admin/add/lecturer/${token}`);
+                  }
+                });   
+            }
+          });
+        }
+        req.flash("error_msg", "No Personal Details Of Lecturers Are Contained In The Excel File");
+        res.redirect(`/admin/add/lecturer/${token}`);
+      })
+      .catch((err) => {
+        if(err){
+          res.locals.pageTitle = "Add Lecturer";
+          req.flash("error_msg", err);
+          res.redirect(`/admin/add/lecturer/${token}`);
+        }
+      });
+    });
+  }
+  res.render("unAuthorized");
+});
+
 //Add New Student
 routes.post("/add/student/:token", ensureAdminAuthentication, (req, res) => {
   var token = req.params.token;
@@ -376,8 +473,7 @@ routes.post("/add/students/:token", ensureAdminAuthentication, (req, res) => {
       readExcelFile(`./public/${excelFile}`).then((rows) => {
         if(rows.length >= 2){
           return rows.forEach((personalDetails, index) => {
-            if(personalDetails && index > 0){
-              console.log(personalDetails)
+            if(personalDetails.length == 3 && index > 0){
               var studentDetails = {
                 firstName: personalDetails[0],
                 lastName: personalDetails[1],
