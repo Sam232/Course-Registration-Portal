@@ -263,7 +263,7 @@ routes.post("/add/students-payments/:token", ensureFinanceAuthentication, (req, 
                           res.redirect(`/finance/add/student-payment/${token}`);
                         }
                         else{
-                          req.flash("success_msg", "New Lecturers Details Added");
+                          req.flash("success_msg", "New Students Payments Details Added");
                           res.redirect(`/finance/add/student-payment/${token}`);
                         }
                       });
