@@ -1,6 +1,10 @@
 const routes = require("express").Router();
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const readExcelFile = require("read-excel-file/node");
+const fs = require("fs");
+const path = require("path");
 
 const {ensureFinanceAuthentication} = require("../config/auth");
 
@@ -191,6 +195,101 @@ routes.post("/add/student-payment/:token", ensureFinanceAuthentication, (req, re
           }          
         }
       });  
+  }
+  res.render("unAuthorized");
+});
+
+//Add Two Or More Students Payments Details Contained In An Excel File
+routes.post("/add/students-payments/:token", ensureFinanceAuthentication, (req, res) => {
+  var token = req.params.token;
+  
+  if(token === req.user.token){
+    var excelFile;
+
+    var upload = multer({
+      storage: multer.diskStorage({
+        destination: (req, file, callback) => {
+          callback(null, "./public/");
+        },
+        filename: (req, file, callback) => {
+          excelFile = file.fieldname + "-" + Date.now() + path.extname(file.originalname);
+          callback(null, excelFile);
+        }
+      }),
+      fileFilter: (req, file, callback) => {
+        var extname = path.extname(file.originalname);
+        
+        if(extname === ".xlsx"){
+          return callback(null, true);
+        }
+        callback(new Error("A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded"));
+      }
+    }).single("studentsPaymentsFile");
+
+    return upload(req, res, (err) => {
+      if(err){
+        res.locals.pageTitle = "Add Student Payment";
+        req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
+        return res.redirect(`/finance/add/student-payment/${token}`);
+      }
+ 
+      readExcelFile(`./public/${excelFile}`).then((rows) => {
+        if(rows.length >= 2){
+          return rows.forEach((paymentDetails, index) => {
+            if(paymentDetails.length == 3 && index > 0){
+              var studentPaymentDetails = {
+                indexNumber: paymentDetails[0],
+                level: paymentDetails[1],
+                semester: paymentDetails[2]
+              };
+              axios.post(`https://gtuccrrestapi.herokuapp.com/finance/add/payment/${req.user.details._id}.`, {
+                indexNumber: studentPaymentDetails.indexNumber,
+                level: studentPaymentDetails.level,
+                semester: studentPaymentDetails.semester
+              }, {
+                headers: {
+                  "Authorization": `bearer ${token}`
+                }
+              })
+                .then((response) => {
+                  if(response.data){
+                    var newRowLength = rows.length - 1;
+                    if(index == newRowLength){
+                      return fs.unlink(`./public/${excelFile}`, (err) => {
+                        if(err){                          
+                          console.log("Unable To Delete Excel File After Submitting The Rows Of The Spreadsheet To The Database");
+                          req.flash("success_msg", "New Students Payments Details Added");
+                          res.redirect(`/finance/add/student-payment/${token}`);
+                        }
+                        else{
+                          req.flash("success_msg", "New Lecturers Details Added");
+                          res.redirect(`/finance/add/student-payment/${token}`);
+                        }
+                      });
+                    }
+                    index++;
+                  }
+                })
+                .catch((err) => {
+                  if(err.response){
+                    req.flash("error_msg", err.response.data.errorMsg);
+                    res.redirect(`/finance/add/student-payment/${token}`);
+                  }
+                });   
+            }
+          });
+        }
+        req.flash("error_msg", "No Payments Details Of Students Are Contained In The Excel File");
+        res.redirect(`/finance/add/student-payment/${token}`);
+      })
+      .catch((err) => {
+        if(err){
+          res.locals.pageTitle = "Add Student Payment";
+          req.flash("error_msg", err);
+          res.redirect(`/finance/add/student-payment/${token}`);
+        }
+      });
+    });
   }
   res.render("unAuthorized");
 });

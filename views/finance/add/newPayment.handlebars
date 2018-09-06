@@ -32,21 +32,29 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" class="moveUp1" action="/finance/add/student-payment/{{user.token}}" method="post">
-              <div class="box-body scroll">
-                <div class="form-group has-feedback">
-                  {{#if error_msg}}
-                    <p class="text-danger noMargin">{{error_msg}}</p>
-                  {{/if}}
-                  {{#if error_msg_}}
-                    <p class="text-danger noMargin">{{error_msg_}}</p>
-                  {{/if}}
-                  {{#if success_msg}}
-                    <p class="text-success noMargin">{{success_msg}}</p>
-                  {{/if}}
-                  {{#if success_msg_}}
-                    <p class="text-success noMargin">{{success_msg_}}</p>
-                  {{/if}}
+            <div class="box-body scroll">
+              {{#if error_msg}}
+                <p class="text-danger noMargin">{{error_msg}}</p>
+              {{/if}}
+              {{#if error_msg_}}
+                <p class="text-danger noMargin">{{error_msg_}}</p>
+              {{/if}}
+              {{#if success_msg}}
+                <p class="text-success noMargin">{{success_msg}}</p>
+              {{/if}}
+              {{#if success_msg_}}
+                <p class="text-success noMargin">{{success_msg_}}</p>
+              {{/if}}
+              <form role="form" action="/finance/add/students-payments/{{user.token}}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="uploadExcelFile">Upload Excel File Containing Students Payments Details</label>
+                  <input type="file" name="studentsPaymentsFile" required/>
+                </div>
+                <input type="submit" value="Upload" class="btn btn-primary btn-raised">
+              </form>
+              <h4 class="text-left">Add One Student Payment Details From Below</h4>
+              <form role="form" class="moveUp1" action="/finance/add/student-payment/{{user.token}}" method="post">
+                <div class="form-group has-feedback">                  
                   <input type="text" class="form-control" name="indexNumber" placeholder="Enter Index Number" value="{{indexNumber}}" required>
                   <span class="fa fa-pencil form-control-feedback"></span>
                 </div>
@@ -68,12 +76,12 @@
                   </select>
                   <span class="fa fa-dot-circle-o form-control-feedback"></span>
                 </div>
-              </div>
               <!-- /.box-body -->
-              <div class="box-footer">
-                <button type="submit" class="btn btn-primary btn-raised">Submit</button>
-              </div>
-            </form>
+            </div>            
+            <div class="box-footer">
+              <button type="submit" class="btn btn-primary btn-raised">Submit</button>
+            </div>
+          </form>
           </div>
           <!-- /.box -->
         </div>

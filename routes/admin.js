@@ -315,9 +315,9 @@ routes.post("/add/lecturers/:token", ensureAdminAuthentication, (req, res) => {
 
     return upload(req, res, (err) => {
       if(err){
-        res.locals.pageTitle = "Add Student";
+        res.locals.pageTitle = "Add Lecturer";
         req.flash("error_msg", "A Valid SpreadSheet File With .xlsx Extension Should Be Uploaded");
-        return res.redirect(`/admin/add/student/${token}`);
+        return res.redirect(`/admin/add/lecturer/${token}`);
       }
  
       readExcelFile(`./public/${excelFile}`).then((rows) => {
