@@ -32,6 +32,7 @@ $(document).ready(() => {
           if(response){           
             if(response.data.addState == "Successful"){
               if(mobile){
+                console.log(mobile)
                 return alert("Course Registered");
               }
               alert("Course Registered");
