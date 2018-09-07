@@ -6,6 +6,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const methodOverride = require("method-override");
 const path = require("path");
+const json2xls = require("json2xls");
 
 const login = require("./routes/login");
 const logout = require("./routes/logout");
@@ -55,6 +56,9 @@ app.use(flash());
 
 //Method Override Middleware
 app.use(methodOverride("_method"));
+
+//Json2xls Middleware
+app.use(json2xls.middleware);
 
 //Global Variables
 app.use((req, res, next) => {

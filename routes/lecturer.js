@@ -5,6 +5,7 @@ const multer = require("multer");
 const readExcelFile = require("read-excel-file/node");
 const fs = require("fs");
 const path = require("path");
+const json2xls = require("json2xls");
 
 const {ensureLecturerAuthentication} = require("../config/auth");
 
@@ -1116,6 +1117,48 @@ routes.get("/confirm-update/:loginToken/:token", ensureLecturerAuthentication, (
           }
         });
     });
+  }
+  res.render("unAuthorized");
+});
+
+//Download Course Registrants
+routes.get("/download/course-registrants/:token", ensureLecturerAuthentication, (req, res) => {
+  var token = req.params.token;
+  
+  if(token === req.user.token){
+    return axios.get(`https://gtuccrrestapi.herokuapp.com/lecturer/view/course/registrants/${req.user.details._id}`, {
+        headers: {
+          "Authorization": `bearer ${token}`
+        }
+    })
+      .then((response) => {
+        if(response){
+          if(response.data.students.length > 0){
+            res.locals.pageTitle = "Students";
+            return res.xls("courseregistrants.xlsx", response.data.students, {
+              fields: {
+                "First Name": String,
+                "Last Name ": String,
+                "Email Address": String,
+                "Mobile Number": String,
+                "Index Number": String
+              }
+            });
+          }
+          res.locals.pageTitle = "Students";
+          res.locals.error_msg_ = "No Students Have Registrated For Your Courses Yet."
+          res.render("lecturer/view/courseRegistrants", {
+            students: response.data.students
+          }); 
+        }
+      })
+      .catch((err) => {
+        if(err.response.data){
+          res.locals.pageTitle = "Welcome";
+          res.locals.error_msg_ = err.response.data.errorMsg;
+          res.redirect(`/lecturer/welcome/${token}`);
+        }
+      });   
   }
   res.render("unAuthorized");
 });
