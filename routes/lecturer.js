@@ -1126,7 +1126,7 @@ routes.get("/download/course-registrants/:token", ensureLecturerAuthentication, 
   var token = req.params.token;
   
   if(token === req.user.token){
-    return axios.get(`https://gtuccrrestapi.herokuapp.com/lecturer/view/course/registrants/${req.user.details._id}`, {
+    return axios.get(`https://gtuccrrestapi.herokuapp.com/lecturer/download/course/registrants/${req.user.details._id}`, {
         headers: {
           "Authorization": `bearer ${token}`
         }
@@ -1138,7 +1138,6 @@ routes.get("/download/course-registrants/:token", ensureLecturerAuthentication, 
             res.locals.pageTitle = "Students";
             return res.xls("courseregistrants.xlsx", response.data.students, {
               fields: {
-                "_ID": String,
                 "First Name": String,
                 "Email Address": String,
                 "Last Name ": String,                
