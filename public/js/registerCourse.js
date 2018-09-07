@@ -43,6 +43,7 @@ $(document).ready(() => {
           }
         })
         .catch((err) => {
+          console.log(err)
           if(err.response.data.errorMsg){
             if(mobile){
               return alert(err.response.data.errorMsg);
