@@ -29,6 +29,7 @@ $(document).ready(() => {
         .then((response) => {
           if(response){           
             if(response.data.addState == "Successful"){
+              console.log(response.data)
               $("p#"+response.data.addedCourse.code).html("Successful");
               alert("Course Registered");
             }            
