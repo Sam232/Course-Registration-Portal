@@ -1,4 +1,6 @@
 $(document).ready(() => {
+  var mobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+
   $("input:checkbox").on("click", (e) => {
     var checked = $(e.target).is(":checked");
 
@@ -27,14 +29,20 @@ $(document).ready(() => {
         }
       })
         .then((response) => {
-          if(response){
+          if(response){           
             if(response.data.addState == "Successful"){
+              if(mobile){
+                return alert("Course Registered");
+              }
               alert("Course Registered");
             }            
           }
         })
         .catch((err) => {
           if(err.response.data.errorMsg){
+            if(mobile){
+              return alert(err.response.data.errorMsg);
+            }
             alert(err.response.data.errorMsg);
           }
         }); 
@@ -53,12 +61,18 @@ $(document).ready(() => {
         .then((response) => {
           if(response){
             if(response.data.deleteState == "Successful"){
+              if(mobile){
+                return alert("Course Unregistered");
+              }
               alert("Course Unregistered");
             }            
           }
         })
         .catch((err) => {
           if(err.response.data.errorMsg){
+            if(mobile){
+              return alert(err.response.data.errorMsg);
+            }
             alert(err.response.data.errorMsg);
           }
         }); 
