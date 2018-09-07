@@ -1,25 +1,4 @@
 $(document).ready(() => {
-  var mobile = {
-    Android: function() {
-        return navigator.userAgent.match(/Android/i);
-    },
-    BlackBerry: function() {
-        return navigator.userAgent.match(/BlackBerry/i);
-    },
-    iOS: function() {
-        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-    },
-    Opera: function() {
-        return navigator.userAgent.match(/Opera Mini/i);
-    },
-    Windows: function() {
-        return navigator.userAgent.match(/IEMobile/i);
-    },
-    any: function() {
-        return (mobile.Android() || mobile.BlackBerry() || mobile.iOS() || mobile.Opera() || mobile.Windows());
-    }
-  };
-
   $("input:checkbox").on("click", (e) => {
     var checked = $(e.target).is(":checked");
 
@@ -50,18 +29,13 @@ $(document).ready(() => {
         .then((response) => {
           if(response){           
             if(response.data.addState == "Successful"){
-              if(mobile.any()){
-                return alert("Course Registered");
-              }
+              $("p#register").html("Successful");
               alert("Course Registered");
             }            
           }
         })
         .catch((err) => {
           if(err.response.data.errorMsg){
-            if(mobile.any()){
-              return alert(err.response.data.errorMsg);
-            }
             alert(err.response.data.errorMsg);
           }
         }); 
@@ -80,18 +54,12 @@ $(document).ready(() => {
         .then((response) => {
           if(response){
             if(response.data.deleteState == "Successful"){
-              if(mobile.any()){
-                return alert("Course Unregistered");
-              }
               alert("Course Unregistered");
             }            
           }
         })
         .catch((err) => {
           if(err.response.data.errorMsg){
-            if(mobile.any()){
-              return alert(err.response.data.errorMsg);
-            }
             alert(err.response.data.errorMsg);
           }
         }); 
