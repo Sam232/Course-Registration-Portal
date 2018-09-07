@@ -1137,10 +1137,12 @@ routes.get("/download/course-registrants/:token", ensureLecturerAuthentication, 
             res.locals.pageTitle = "Students";
             return res.xls("courseregistrants.xlsx", response.data.students, {
               fields: {
-                "First Name": String,
-                "Last Name": String,  
-                "Email Address": String,                              
-                "Mobile Number": String,
+                "CODE": String,
+                "NAME": String,
+                "CLASS MARKS": String,
+                "EXAM MARKS": String,
+                "LEVEL": Number,
+                "SEMESTER": Number,
                 "Index Number": String
               }
             });
