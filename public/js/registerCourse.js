@@ -29,7 +29,7 @@ $(document).ready(() => {
         .then((response) => {
           if(response){           
             if(response.data.addState == "Successful"){
-              $("p#"+response.data.courseName).html("Registered");
+              $("p#"+response.data.courseCode).html("Registered");
             }            
           }
         })
@@ -53,7 +53,7 @@ $(document).ready(() => {
         .then((response) => {
           if(response){
             if(response.data.deleteState == "Successful"){
-              $("p#"+response.data.courseName).html("Unregistered");
+              $("p#"+response.data.courseCode).html("Unregistered");
             }            
           }
         })
