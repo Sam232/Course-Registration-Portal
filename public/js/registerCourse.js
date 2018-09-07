@@ -29,9 +29,7 @@ $(document).ready(() => {
         .then((response) => {
           if(response){           
             if(response.data.addState == "Successful"){
-              console.log(response.data)
-              $("p#"+response.data.addedCourse.code).html("Successful");
-              alert("Course Registered");
+              $("p#"+response.data.courseName).html("Registered");
             }            
           }
         })
@@ -55,7 +53,7 @@ $(document).ready(() => {
         .then((response) => {
           if(response){
             if(response.data.deleteState == "Successful"){
-              alert("Course Unregistered");
+              $("p#"+response.data.courseName).html("Unregistered");
             }            
           }
         })

@@ -166,6 +166,7 @@ routes.post("/add/course/", ensureStudentAuthentication, (req, res) => {
                 if(response){
                   if(response.data.addState == "successful"){
                     return res.status(200).json({
+                      courseCode: response.data.addedCourse.code,
                       addState: "Successful"
                     });
                   }
@@ -212,7 +213,7 @@ routes.delete("/delete/course/:courseCode", ensureStudentAuthentication, (req, r
           if(response.data.deleteState == "successful"){
             res.status(200).json({
               deleteState: "Successful",
-              courseName: response.data.deletedCourse.name
+              courseCode: response.data.deletedCourse.code
             });
           }
         }
