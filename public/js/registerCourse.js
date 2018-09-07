@@ -16,7 +16,7 @@ $(document).ready(() => {
         return navigator.userAgent.match(/IEMobile/i);
     },
     any: function() {
-        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+        return (mobile.Android() || mobile.BlackBerry() || mobile.iOS() || mobile.Opera() || mobile.Windows());
     }
   };
 
