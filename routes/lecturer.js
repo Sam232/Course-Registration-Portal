@@ -1134,6 +1134,7 @@ routes.get("/download/course-registrants/:token", ensureLecturerAuthentication, 
       .then((response) => {
         if(response){
           if(response.data.students.length > 0){
+            console.log(response.data.students)
             res.locals.pageTitle = "Students";
             return res.xls("courseregistrants.xlsx", response.data.students, {
               fields: {
