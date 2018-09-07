@@ -32,10 +32,12 @@ $(document).ready(() => {
         .then((response) => {
           if(response){           
             if(response.data.addState == "Successful"){
-              if(mobile){
-                return alert("Course Registered");
-              }
-              alert("Course Registered");
+              // if(mobile){
+              //   return alert("Course Registered");
+              // }
+              // alert("Course Registered");
+              $("div.invisible").removeClass("invisible").addClass("visible");
+              $("courseRegistration").html(response.data.addedCourse.name,"Course Registered Successfully");
             }            
           }
         })
