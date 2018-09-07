@@ -37,7 +37,7 @@ $(document).ready(() => {
               // }
               // alert("Course Registered");
               $("div.invisible").removeClass("invisible").addClass("visible");
-              $("courseRegistration").html(response.data.addedCourse.name,"Course Registered Successfully");
+              $("strong#courseRegistration").html(response.data.addedCourse.name,"Course Registered Successfully");
             }            
           }
         })
