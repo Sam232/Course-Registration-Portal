@@ -71,7 +71,11 @@
                   <td>{{totalMarks}}</td>
                   <td>{{level}}</td>
                   <td>{{semester}}</td>
-                  <form action="/lecturer/delete/selected-student-grade/{{_id}}/{{../user.token}}/?_method=delete" method="post">
+                  <form action="/#" method="post">
+                  <!-- Endpoint For The Forms Data To Be Submitted To Inorder For The Student's Grade Details To Be
+                    Deleted
+                    -- /lecturer/delete/selected-student-grade/{{_id}}/{{../user.token}}/?_method=delete -- 
+                  -->
                   <td>
                     <div class="checkbox">
                       <label>
@@ -80,7 +84,7 @@
                     </div>
                   </td>
                   <td>                   
-                    <button type="submit" class="btnStyle disabled" aria-disabled="true"><strong class="text-danger">Delete</strong></button>
+                    <button type="submit" class="btnStyle"><strong class="text-danger">Delete</strong></button>
                   </td>
                   </form>
                 </tr>
